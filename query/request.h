@@ -7,7 +7,7 @@
 
 #ifndef REQUEST_H_
 #define REQUEST_H_
-#include "request.h"
+#include "../krb/krb.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -20,7 +20,7 @@
 #include "request.h"
 #define MAXDATASIZE 1024
 #include <arpa/inet.h>
-void Client_to_AS_REQ(int sockfd,char *date_time,char *user_name,char *TGS_ID,char *server_msg,char *FLAGS);
+void Client_to_AS_REQ(int sockfd,char *date_time,char *user_name,krb5_kdc_req *as_rep,char *server_msg,char *FLAGS);
 struct TGT{
 	char sesion_key_client_TGS[MAXDATASIZE];
 	char user_name[MAXDATASIZE];

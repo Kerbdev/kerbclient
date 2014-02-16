@@ -17,7 +17,6 @@ int main(int argc, char *argv[]) {
 	char FLAGS=0;
 	char s[INET6_ADDRSTRLEN];
 	char user_name[MAXDATASIZE];
-	char TGS_ID[MAXDATASIZE];
 	char server_msg[MAXDATASIZE];
 	char session_key_client_tgs_secret[MAXDATASIZE];
 	char id_server_secret[MAXDATASIZE];
@@ -69,7 +68,14 @@ int main(int argc, char *argv[]) {
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
 	//RECV date time
-	Client_to_AS_REQ(sockfd,date_time,user_name,TGS_ID,server_msg,&FLAGS);
+	krb5_kdc_req *as_rep=malloc(sizeof(krb5_kdc_req));
+	as_rep->padata=malloc(sizeof(krb5_pa_data));
+	as_rep->client->data=malloc(sizeof(krb5_data));
+	as_rep->addresses=malloc(sizeof(krb5_address));
+	as_rep->unenc_authdata=malloc(sizeof(krb5_authdata));
+	as_rep->second_ticket=malloc(sizeof(krb5_ticket));
+
+	Client_to_AS_REQ(sockfd,date_time,user_name,as_rep,server_msg,&FLAGS);
 	if(FLAGS){
 		printf("You in BD\n");
 	AS_RECV(sockfd,session_key_client_tgs_secret,id_server_secret,time_live_secret,&tgt);
