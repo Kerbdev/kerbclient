@@ -22,10 +22,12 @@
 #include <arpa/inet.h>
 void send_krb5_data(int ,krb5_data*);
 void send_padata(int,krb5_pa_data *);
+void send_krb5_checksum(int ,krb5_checksum *);
 void send_principal_data(int,krb5_principal_data *);
 void send_krb5_address(int,krb5_address *);
 void send_krb5_enc_data(int ,krb5_enc_data *);
 void send_krb5_authdata(int ,krb5_authdata *);
+void send_krb5_authenticator(int,krb5_authenticator *);
 void send_krb5_keyblock(int ,krb5_keyblock *);
 void send_krb5_ticket_times(int ,krb5_ticket_times *);
 void send_krb5_transited(int ,krb5_transited *);
