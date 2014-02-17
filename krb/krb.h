@@ -322,7 +322,7 @@ typedef struct _krb5_cred_info {
     krb5_flags flags;			/* ticket flags, optional */
     krb5_ticket_times times;		/* auth, start, end, renew_till, */
 					/* optional */
-    krb5_address **caddrs;	/* array of ptrs to addresses */
+    krb5_address *caddrs;	/* array of ptrs to addresses */
 } krb5_cred_info;
 
 typedef struct _krb5_cred_enc_part {
@@ -332,7 +332,7 @@ typedef struct _krb5_cred_enc_part {
     int usec;			/* microsecond portion of time */
     krb5_address *s_address;	/* sender address, optional */
     krb5_address *r_address;	/* recipient address, optional */
-    krb5_cred_info **ticket_info;
+    krb5_cred_info *ticket_info;
 } krb5_cred_enc_part;
 
 typedef struct _krb5_cred {
@@ -352,7 +352,7 @@ typedef struct _passwd_phrase_element {
 typedef struct _krb5_pwd_data {
     krb5_magic magic;
     int sequence_count;
-    passwd_phrase_element **element;
+    passwd_phrase_element *element;
 } krb5_pwd_data;
 
 /* these need to be here so the typedefs are available for the prototypes */
