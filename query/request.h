@@ -20,35 +20,32 @@
 #include "request.h"
 #define MAXDATASIZE 1024
 #include <arpa/inet.h>
-void Client_to_AS_REQ(int sockfd,char *date_time,char *user_name,krb5_kdc_req *as_rep,char *server_msg,char *FLAGS);
-struct TGT{
-	char sesion_key_client_TGS[MAXDATASIZE];
-	char user_name[MAXDATASIZE];
-	int time_live;
-	char mark_time[MAXDATASIZE];
-	char ip_client[MAXDATASIZE];
-};
-struct AUTH_CLIENT{
-	char id_client[MAXDATASIZE];
-	int time_data;
-};
-struct TICKET{
-	char id_client[MAXDATASIZE];
-	char ip_client[MAXDATASIZE];
-	char time_data[MAXDATASIZE];
-	int time_live;
-	char sesion_key_client_service[MAXDATASIZE];
-
-};
-struct SERVICE_TICKET{
-	char sesion_key_client_service[MAXDATASIZE];
-	char id_service[MAXDATASIZE];
-	int time_live;
-
-};
-int confirm(int sockfd,struct AUTH_CLIENT NEW_AUTH);
-void Connect_to_service(int sockfd,struct AUTH_CLIENT NEW_AUTH,struct SERVICE_TICKET service_ticket);
-void TGS_REP_RECV(int sockfd,struct TICKET ticket,struct SERVICE_TICKET service_ticket);
-void TGS_REQ(int sockfd,char *id_service,struct TGT tgt,struct AUTH_CLIENT AUTH);
-void AS_RECV(int sockfd,char *session_key_client_tgs_secret,char *id_server_secret,int time_live_secret,struct TGT *tgt);
+void send_krb5_data(int ,krb5_data*);
+void send_padata(int,krb5_pa_data *);
+void send_principal_data(int,krb5_principal_data *);
+void send_krb5_address(int,krb5_address *);
+void send_krb5_enc_data(int ,krb5_enc_data *);
+void send_krb5_authdata(int ,krb5_authdata *);
+void send_krb5_keyblock(int ,krb5_keyblock *);
+void send_krb5_ticket_times(int ,krb5_ticket_times *);
+void send_krb5_transited(int ,krb5_transited *);
+void send_krb5_enc_tkt_part(int ,krb5_enc_tkt_part *);
+void send_krb5_ticket(int new_fd,krb5_ticket *as_rep);
+void recv_principal_data(int,krb5_principal_data *);
+void recv_krb5_data(int ,krb5_data *);
+void send_krb5_kdc_req(int sockfd,krb5_kdc_req *as_rep,char *FLAGS);
+void recv_padata(int,krb5_pa_data *);
+void recv_principal_data(int,krb5_principal_data *);
+void recv_krb5_enc_data(int,krb5_enc_data *);
+void recv_krb5_ticket(int ,krb5_ticket *);
+void recv_krb5_keyblock(int,krb5_keyblock *);
+void recv_krb5_ticket_times(int,krb5_ticket_times *);
+void recv_krb5_address(int ,krb5_address *);
+void recv_krb5_enc_kdc_rep_part(int,krb5_enc_kdc_rep_part *);
+void recv_krb5_kdc_rep(int,krb5_kdc_rep *);
+void recv_krb5_enc_tkt_part(int,krb5_enc_tkt_part *);
+void recv_krb5_transited(int,krb5_transited *);
+void recv_krb5_authdata(int,krb5_authdata *);
+void send_krb5_ap_req(int,krb5_ap_req *);
+void recv_krb5_kdc_rep(int,krb5_kdc_rep *);
 #endif /* REQUEST_H_ */

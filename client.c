@@ -11,22 +11,10 @@ void *get_in_addr(struct sockaddr *sa) {
 
 int main(int argc, char *argv[]) {
 	int sockfd;
-	char date_time[MAXDATASIZE];
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
 	char FLAGS=0;
 	char s[INET6_ADDRSTRLEN];
-	char user_name[MAXDATASIZE];
-	char server_msg[MAXDATASIZE];
-	char session_key_client_tgs_secret[MAXDATASIZE];
-	char id_server_secret[MAXDATASIZE];
-	int time_live_secret=0;
-	char id_service[MAXDATASIZE];
-	struct TGT tgt;
-	struct AUTH_CLIENT AUTH;
-	struct SERVICE_TICKET service_ticket;
-	struct TICKET ticket;
-	struct AUTH_CLIENT NEW_AUTH;
 	if (argc != 2) {
 		fprintf(stderr, "usage: client hostname\n");
 		exit(1);
@@ -75,24 +63,9 @@ int main(int argc, char *argv[]) {
 	as_rep->unenc_authdata=malloc(sizeof(krb5_authdata));
 	as_rep->second_ticket=malloc(sizeof(krb5_ticket));
 
-	Client_to_AS_REQ(sockfd,date_time,user_name,as_rep,server_msg,&FLAGS);
-	if(FLAGS){
-		printf("You in BD\n");
-	AS_RECV(sockfd,session_key_client_tgs_secret,id_server_secret,time_live_secret,&tgt);
-		printf("Enter ID SERVICE:");
-		scanf("%s",id_service);
-	TGS_REQ(sockfd,id_service,tgt,AUTH);
-	TGS_REP_RECV(sockfd,ticket,service_ticket);
-	Connect_to_service(sockfd,NEW_AUTH,service_ticket);
-	if (confirm(sockfd,NEW_AUTH)){
-		printf("Client confirm to  service");
-	}
-	else printf("NOT CONFIRM A SERVICE");
-
-
-	}
-	else{ printf("Error you not in BD");
-		close(1);}
+	send_krb5_kdc_req(sockfd,as_rep,&FLAGS);
+	if(FLAGS){}
+		close(1);
 
 
 	//printf("%s", server_msg);

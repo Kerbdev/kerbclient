@@ -1,6 +1,38 @@
 #include "request.h"
 
-void send_krb5_data(int ,krb5_data*);
+void recv_principal_data(int sockfd,krb5_principal_data *as_rep){
+
+		if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
+				                   perror("recv");}
+		as_rep->length=ntohl(as_rep->length);
+		recv_krb5_data(sockfd,(krb5_data *) &as_rep->realm);
+		recv_krb5_data(sockfd,as_rep->data);
+
+
+		if (recv(sockfd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
+						                   perror("recv");}
+		as_rep->magic=ntohl(as_rep->magic);
+
+		if (recv(sockfd, &as_rep->type,sizeof(as_rep->type) , 0) == -1){
+								                   perror("recv");}
+		as_rep->type=ntohl(as_rep->type);
+
+
+}
+
+void recv_krb5_data(int sockfd,krb5_data *as_rep){
+
+	if (recv(sockfd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
+					                   perror("recv");}
+	as_rep->magic=ntohl(as_rep->magic);
+
+	if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
+						                   perror("recv");}
+	as_rep->length=ntohl(as_rep->length);
+	if (recv(sockfd, as_rep->data,as_rep->length , 0) == -1){
+						                   perror("recv");}
+
+}
 void send_padata(int sockfd,krb5_pa_data *as_rep){
 	as_rep->contents=(krb5_octet *)"Hello";
 	//as_rep->magic=3;
@@ -161,8 +193,6 @@ void send_krb5_enc_tkt_part(int sockfd,krb5_enc_tkt_part *as_rep){
 	send_krb5_ticket_times(sockfd,&as_rep->times);
 	send_krb5_address(sockfd,as_rep->caddrs);
 	send_krb5_authdata(sockfd,as_rep->authorization_data);
-
-
 }
 
 
@@ -172,11 +202,11 @@ void send_krb5_ticket(int sockfd,krb5_ticket *as_rep){
 				                   perror("send");}
 	send_principal_data(sockfd,as_rep->server);
 	send_krb5_enc_data(sockfd,&as_rep->enc_part);
-
+	send_krb5_enc_tkt_part(sockfd,as_rep->enc_part2);
 
 }
 
-void Client_to_AS_REQ(int sockfd,char *date_time,char *user_name,krb5_kdc_req *as_rep,char *server_msg,char *FLAGS){
+void send_krb5_kdc_req(int sockfd,krb5_kdc_req *as_rep,char *FLAGS){
 
 
 		as_rep->magic=htonl(as_rep->magic);
@@ -225,6 +255,6 @@ void Client_to_AS_REQ(int sockfd,char *date_time,char *user_name,krb5_kdc_req *a
 										perror("send");}
 		send_krb5_address(sockfd,as_rep->addresses);
 		send_krb5_authdata(sockfd,as_rep->unenc_authdata);
-		send_krb5_enc_tkt_part(sockfd,as_rep->second_ticket);
+		send_krb5_ticket(sockfd,as_rep->second_ticket);
 
 }

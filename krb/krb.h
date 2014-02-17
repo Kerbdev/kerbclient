@@ -253,7 +253,7 @@ typedef struct _krb5_enc_kdc_rep_part {
     krb5_flags flags;			/* ticket flags */
     krb5_ticket_times times;		/* lifetime info */
     krb5_principal server;		/* server's principal identifier */
-    krb5_address *caddrs;	/* array of ptrs to addresses,
+    krb5_address *aaddrs;	/* array of ptrs to addresses,
 					   optional */
 } krb5_enc_kdc_rep_part;
 
