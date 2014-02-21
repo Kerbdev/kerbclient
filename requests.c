@@ -5,7 +5,8 @@
 #include <polarssl\entropy.h>
 #include <polarssl\ctr_drbg.h>
 #include <polarssl\aes.h>
-#include <parser\get_config_param.h>
+#include "parser\get_config_param.h"
+#include "usefull_func\usefull.h"
 const char* clientpass = "12345"; // pass
 ctr_drbg_context ctr_drbg;
 entropy_context entropy;
@@ -26,12 +27,12 @@ int ko = 10; // kdc-options
 configuration conf;
 time_t starttime = time(NULL);
 time_t endtime = starttime + conf.max_life * 3600;
-void KRB_AS_REQ(krb5_kdc_req *kkk)
+void KRB_AS_REQ(krb5_kdc_req *kkk, krb5_pa_data *ppp)
 	{   kkk->msg_type=10;
 		int pver = pvno; // Kerb ver
-		int msg_type = 10; // Msg type
+		kkk->msg_type = 10; // Msg type
 		if (is_pa_enc_timestamp_required)
-			padatatype = 0; // Pre-auth type check
+			ppp->pa_type = 0; // Pre-auth type check
 				/* generating client key */
 		entropy_init( &entropy );
 		if((ret = ctr_drbg_init(&ctr_drbg, entropy_func, &entropy,
@@ -58,14 +59,14 @@ void KRB_AS_REQ(krb5_kdc_req *kkk)
 		aes_setkey_enc(&aes, key, 256);
 		aes_crypt_cbc(&aes, AES_ENCRYPT, 12, iv, input, output);
 		/* end */
-		char* cname = "client";
-		char* realm = "realm";
-		char* sname = "server";
+		kkk->client->data->data = "client";
+		kkk->server->data->data = "server";
+		//kkk->client->realm = "realm";
 		if (int_to_bit(ko, POSTDATED))
-			time_t from = starttime;
+			kkk->from = starttime;
 		time_t till = endtime;
 		if (int_to_bit(ko, RENEWABLE))
-			time_t rlife = conf.max_renewable_life;
-		int nonce = 13243;
-		char* etype = "aes";
+			kkk->rtime = conf.max_renewable_life;
+		kkk->nonce = 13243;
+		kkk->ktype = 0;
 	}
