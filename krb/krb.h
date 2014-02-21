@@ -5,6 +5,7 @@
  *      Author: ivan
  */
 
+#define pvno 5
 #define MAXDATASIZE 1024
 #define	KRB5_AS_REQ	((krb5_msgtype)10) /* Req for initial authentication */
 #define	KRB5_AS_REP	((krb5_msgtype)11) /* Response to KRB_AS_REQ request */
