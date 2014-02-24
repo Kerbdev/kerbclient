@@ -4,9 +4,8 @@
  *  Created on: Dec 16, 2013
  *      Author: ivan
  */
-#include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
-#include <time.h>
 #include <time.h>
 char* asd(const struct tm *timeptr);
 void date(char *date_mas){

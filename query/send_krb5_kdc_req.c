@@ -34,7 +34,7 @@ void recv_krb5_data(int sockfd,krb5_data *as_rep){
 
 }
 void send_padata(int sockfd,krb5_pa_data *as_rep){
-	as_rep->contents=(krb5_octet *)"Hello";
+	//as_rep->contents=(krb5_octet *)"Hello";
 	//as_rep->magic=3;
 	//as_rep->pa_type=2;
 	as_rep->length=strlen((char *) as_rep->contents);
@@ -208,7 +208,7 @@ void send_krb5_ticket(int sockfd,krb5_ticket *as_rep){
 
 void send_krb5_kdc_req(int sockfd,krb5_kdc_req *as_rep,char *FLAGS){
 
-
+		as_rep->magic=10;
 		as_rep->magic=htonl(as_rep->magic);
 		if (send(sockfd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
 		                   perror("send");}

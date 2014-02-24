@@ -1,4 +1,6 @@
 #include "query/request.h"
+#include "message/message.h"
+#include "dynamic/dynamic.h"
 #define PORT "3490" // Порт, к которому подключается клиент
 // получение структуры sockaddr, IPv4 или IPv6:
 void *get_in_addr(struct sockaddr *sa) {
@@ -56,16 +58,18 @@ int main(int argc, char *argv[]) {
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
 	//RECV date time
-	krb5_kdc_req *as_rep=malloc(sizeof(krb5_kdc_req));
-	as_rep->padata=malloc(sizeof(krb5_pa_data));
-	as_rep->client->data=malloc(sizeof(krb5_data));
-	as_rep->addresses=malloc(sizeof(krb5_address));
-	as_rep->unenc_authdata=malloc(sizeof(krb5_authdata));
-	as_rep->second_ticket=malloc(sizeof(krb5_ticket));
-
+	krb5_kdc_req *as_rep=calloc(1,sizeof(krb5_kdc_req));
+	//memset(&as_rep,2,sizeof(krb5_kdc_req));
+	//memset(as_rep,13,sizeof(krb5_kdc_req));
+	//malloc_krb5_kdc_req(&as_rep);
+	//malloc_krb5_kdc_req(as_rep);
+	        	//malloc_krb5_kdc_req(as_rep);
+	//KRB_AS_REQ(&as_rep, as_rep.padata);
+	malloc_krb5_kdc_req(as_rep);
+	KRB_AS_REQ(as_rep,as_rep->padata);
 	send_krb5_kdc_req(sockfd,as_rep,&FLAGS);
-	if(FLAGS){}
-		close(1);
+	//if(FLAGS){}
+		//close(1);
 
 
 	//printf("%s", server_msg);

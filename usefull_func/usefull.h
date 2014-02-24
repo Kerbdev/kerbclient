@@ -16,8 +16,8 @@
 #define INVALID 7
 #define RENEWABLE 8
 #define INITIAL 9
-#define PRE­AUTHENT 10
-#define HW­AUTHENT 11
+#define PREAUTHENT 10
+#define HWAUTHENT 11
 int int_to_bit(unsigned int,int);
 
 #endif /* USEFULL_H_ */

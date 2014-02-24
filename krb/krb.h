@@ -4,7 +4,8 @@
  *  Created on: Feb 10, 2014
  *      Author: ivan
  */
-
+#ifndef __KRB__H__
+#define __KRB__H__
 #define pvno 5
 #define MAXDATASIZE 1024
 #define	KRB5_AS_REQ	((krb5_msgtype)10) /* Req for initial authentication */
@@ -373,11 +374,6 @@ typedef struct _krb5_safe {
     krb5_checksum *checksum;    /* data integrity checksum */
 } krb5_safe;
 
-typedef struct _krb5_priv {
-    krb5_magic magic;
-    krb5_enc_data enc_part;             /* encrypted part */
-} krb5_priv;
-
 typedef struct _krb5_priv_enc_part {
     krb5_magic magic;
     krb5_data user_data;                /* user data */
@@ -387,6 +383,10 @@ typedef struct _krb5_priv_enc_part {
     krb5_address *s_address;    /* sender address */
     krb5_address *r_address;    /* recipient address, optional */
 } krb5_priv_enc_part;
+typedef struct _krb5_priv {
+    krb5_magic magic;
+    krb5_priv_enc_part enc_part;             /* encrypted part */
+} krb5_priv;
 typedef krb5_pointer krb5_kt_cursor;	/* XXX */
 
 typedef struct krb5_keytab_entry_st {
@@ -400,7 +400,7 @@ typedef struct krb5_keytab_entry_st {
 struct _krb5_kt;
 typedef struct _krb5_kt *krb5_keytab;
 void init_as_req(krb5_kdc_req *,char *);
-
+#endif
 
 
 
