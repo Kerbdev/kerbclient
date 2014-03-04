@@ -105,3 +105,4 @@
                                                       to the IAKERB proxy */
 
 #endif /* ERROR_H_ */
+int decrypt_error();
