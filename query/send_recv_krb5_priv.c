@@ -27,7 +27,7 @@ void send_krb5_priv_enc_part(int sockfd,krb5_priv_enc_part *priv_part){
 	priv_part->magic=htonl(priv_part->magic);
 		if (send(sockfd, &priv_part->magic,sizeof(priv_part->magic) , 0) == -1){
 				                   perror("send");}
-	send_krb5_data(sockfd,&priv_part->user_data);
+	send_krb5_data(sockfd,priv_part->user_data);
 	priv_part->timestamp=htonl(priv_part->timestamp);
 		if (send(sockfd, &priv_part->timestamp,sizeof(priv_part->timestamp) , 0) == -1){
 					                perror("send");}
@@ -37,8 +37,8 @@ void send_krb5_priv_enc_part(int sockfd,krb5_priv_enc_part *priv_part){
 	priv_part->seq_number=htonl(priv_part->seq_number);
 		if (send(sockfd, &priv_part->seq_number,sizeof(priv_part->seq_number) , 0) == -1){
 									perror("send");}
-	send_krb5_address(sockfd,priv_part->r_address);
-	send_krb5_address(sockfd,priv_part->s_address);
+	send_krb5_address(sockfd,*priv_part->r_address);
+	send_krb5_address(sockfd,*priv_part->s_address);
 }
 void recv_krb5_priv_enc_part(int sockfd,krb5_priv_enc_part *priv_part){
 

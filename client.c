@@ -67,7 +67,7 @@ int main(int argc, char *argv[]) {
 	//KRB_AS_REQ(&as_rep, as_rep.padata);
 	malloc_krb5_kdc_req(as_rep);
 	KRB_AS_REQ(as_rep,as_rep->padata);
-	send_krb5_kdc_req(sockfd,as_rep,&FLAGS);
+	send_krb5_kdc_req(sockfd,*as_rep,&FLAGS);
 	//if(FLAGS){}
 		//close(1);
 

@@ -9,7 +9,7 @@ void send_krb5_safe(int sockfd,krb5_safe *safe){
 	safe->magic=htonl(safe->magic);
 	if (send(sockfd, &safe->magic,sizeof(safe->magic) , 0) == -1){
 			                   perror("send");}
-	send_krb5_data(sockfd,&safe->user_data);
+	send_krb5_data(sockfd,safe->user_data);
 	safe->timestamp=htonl(safe->timestamp);
 	if (send(sockfd, &safe->timestamp,sizeof(safe->timestamp) , 0) == -1){
 					                   perror("send");}
@@ -19,8 +19,8 @@ void send_krb5_safe(int sockfd,krb5_safe *safe){
 	safe->seq_number=htonl(safe->seq_number);
 	if (send(sockfd, &safe->seq_number,sizeof(safe->seq_number) , 0) == -1){
 					                   perror("send");}
-	send_krb5_address(sockfd,safe->s_address);
-	send_krb5_address(sockfd,safe->r_address);
+	send_krb5_address(sockfd,*safe->s_address);
+	send_krb5_address(sockfd,*safe->r_address);
 	send_krb5_checksum(sockfd,safe->checksum);
 
 }

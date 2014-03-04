@@ -13,8 +13,8 @@ void send_krb5_ap_req(int sockfd,krb5_ap_req *req){
 	req->ap_options=htonl(req->ap_options);
 	if (send(sockfd, &req->ap_options,sizeof(req->ap_options) , 0) == -1){
 					                   perror("send");}
-	send_krb5_ticket(sockfd,req->ticket);
-	send_krb5_enc_data(sockfd,&req->authenticator);
+	send_krb5_ticket(sockfd,*req->ticket);
+	send_krb5_enc_data(sockfd,req->authenticator);
 
 }
 

@@ -235,7 +235,6 @@ krb5_free_kdc_req(krb5_kdc_req *val)
     krb5_free_pa_data(val->padata);
     krb5_free_principal(val->client);
     krb5_free_principal(val->server);
-    free(val->ktype);
     krb5_free_address(val->addresses);
     free(val->authorization_data.ciphertext.data);
     krb5_free_authdata(val->unenc_authdata);

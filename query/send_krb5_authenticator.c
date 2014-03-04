@@ -24,7 +24,7 @@ void send_krb5_authenticator(int sockfd,krb5_authenticator *auth){
 	auth->magic=htonl(auth->magic);
 	if (send(sockfd, &auth->magic,sizeof(auth->magic) , 0) == -1){
 			                   perror("send");}
-	send_principal_data(sockfd,auth->client);
+	send_principal_data(sockfd,*auth->client);
 	send_krb5_checksum(sockfd,auth->checksum);
 	auth->cusec=htonl(auth->cusec);
 	if (send(sockfd, &auth->cusec,sizeof(auth->cusec) , 0) == -1){
@@ -32,10 +32,10 @@ void send_krb5_authenticator(int sockfd,krb5_authenticator *auth){
 	auth->ctime=htonl(auth->ctime);
 	if (send(sockfd, &auth->ctime,sizeof(auth->ctime) , 0) == -1){
 				               perror("send");}
-	send_krb5_keyblock(sockfd,auth->subkey);
+	send_krb5_keyblock(sockfd,*auth->subkey);
 	auth->seq_number=htonl(auth->seq_number);
 	if (send(sockfd, &auth->seq_number,sizeof(auth->seq_number) , 0) == -1){
 			                   perror("send");}
-	send_krb5_authdata(sockfd,auth->authorization_data);
+	send_krb5_authdata(sockfd,*auth->authorization_data);
 }
 
