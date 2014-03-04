@@ -30,4 +30,5 @@
 
 int int_to_bit(unsigned int,int);
 void set_bit(int *,int ,int);
+int min(int a, ...);
 #endif /* USEFULL_H_ */
