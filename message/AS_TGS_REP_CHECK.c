@@ -23,7 +23,7 @@ void AS_TGS_REP_CHECK(krb5_kdc_req *req, krb5_error *err, krb5_kdc_rep *resp, co
 		if((req->from == 0) && (difftime(kdc_time + config.max_life, resp->enc_part2->times.starttime) < 0))
 		{
 			resp->enc_part2->session->contents = NULL;
-			printf("%d", err->error = int_to_bit(ko, KRB_AP_ERR_SKEW);
+			printf("%d", err->error = int_to_bit(ko, KRB_AP_ERR_SKEW));
 		}
 		if((req->from != 0) && (req->from != resp->enc_part2->times.starttime))
 		{
