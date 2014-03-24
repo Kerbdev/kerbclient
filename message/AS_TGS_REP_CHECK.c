@@ -14,7 +14,7 @@ void AS_TGS_REP_CHECK(krb5_kdc_req *req, krb5_error *err, krb5_kdc_rep *resp, co
 			|| (req->addresses != resp->enc_part2->aaddrs))
 		{
 			resp->enc_part2->session->contents = NULL;
-			printf("%d", err->error = int_to_bit(ko, KRB_AP_ERR_MODIFIED);
+			printf("%d", err->error = int_to_bit(ko, KRB_AP_ERR_MODIFIED));
 		}
 		/* make sure no flags are set that shouldn't be, and that  */
         /* all that should be are set                              */

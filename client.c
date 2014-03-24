@@ -57,28 +57,10 @@ int main(int argc, char *argv[]) {
 	printf("client: connecting to %s\n", s);
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
-	//RECV date time
 	krb5_kdc_req *as_rep=calloc(1,sizeof(krb5_kdc_req));
-	//memset(&as_rep,2,sizeof(krb5_kdc_req));
-	//memset(as_rep,13,sizeof(krb5_kdc_req));
-	//malloc_krb5_kdc_req(&as_rep);
-	//malloc_krb5_kdc_req(as_rep);
-	        	//malloc_krb5_kdc_req(as_rep);
-	//KRB_AS_REQ(&as_rep, as_rep.padata);
 	malloc_krb5_kdc_req(as_rep);
 	KRB_AS_REQ(as_rep,as_rep->padata);
 	send_krb5_kdc_req(sockfd,*as_rep,&FLAGS);
-	//if(FLAGS){}
-		//close(1);
-
-
-	//printf("%s", server_msg);
-	//strcpy(cmd, "date --set");
-	//strcat(cmd, "=");
-	//strcat(cmd, "\"");
-	//strcat(cmd, date_time);
-	//strcat(cmd, "\"");
-	//system(cmd);
 
 	exit(0);
 }

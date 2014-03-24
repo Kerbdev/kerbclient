@@ -12,11 +12,14 @@ void send_krb5_checksum(int sockfd,krb5_checksum *check){
 	check->checksum_type=htonl(check->checksum_type);
 	if (send(sockfd, &check->checksum_type,sizeof(check->checksum_type) , 0) == -1){
 			                   perror("send");}
-	int len=check->length;
+	check->length=0;
+		if(check->contents)
+		check->length=strlen((char *) check->contents)+1;
+		int len=check->length;
 	check->length=htonl(check->length);
 	if (send(sockfd, &check->length,sizeof(check->length) , 0) == -1){
 									perror("send");}
-
+	if(len)
 	if (send(sockfd, (char *) check->contents,len , 0) == -1){
 										perror("send");}
 }

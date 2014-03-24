@@ -34,11 +34,7 @@ void recv_krb5_data(int sockfd,krb5_data *as_rep){
 
 }
 void send_padata(int sockfd,krb5_pa_data as_rep){
-	//as_rep->contents=(krb5_octet *)"Hello";
-	//as_rep->magic=3;
-	//as_rep->pa_type=2;
 	as_rep.length=0;
-	as_rep.contents=(krb5_octet*)"Hello";
 	if(as_rep.contents)
 	as_rep.length=strlen((char *) as_rep.contents)+1;
 	int len=as_rep.length;
@@ -80,7 +76,6 @@ void send_krb5_data(int sockfd,krb5_data as_rep){
 	if (send(sockfd, &as_rep.magic,sizeof(as_rep.magic) , 0) == -1){
 					                   perror("send");}
 	as_rep.length=0;
-	as_rep.data="HEllo";
 	if(as_rep.data)
 	as_rep.length=strlen(as_rep.data)+1;
 	int len=as_rep.length;
@@ -101,7 +96,6 @@ void send_krb5_address(int sockfd,krb5_address as_rep){
 	as_rep.addrtype=htonl(as_rep.addrtype);
 		if (send(sockfd, &as_rep.addrtype,sizeof(as_rep.addrtype) , 0) == -1){
 							               perror("send");}
-		as_rep.contents=(krb5_octet *)"HellllloooW";
 		as_rep.length=0;
 		if(as_rep.contents)
 		as_rep.length=strlen((char *) as_rep.contents)+1;
@@ -115,7 +109,6 @@ void send_krb5_address(int sockfd,krb5_address as_rep){
 
 }
 void send_krb5_enc_data(int sockfd,krb5_enc_data as_rep){
-	as_rep.magic=300;
 	as_rep.magic=htonl(as_rep.magic);
 			if (send(sockfd, &as_rep.magic,sizeof(as_rep.magic) , 0) == -1){
 			                   perror("send");}
@@ -139,7 +132,6 @@ void send_krb5_authdata(int sockfd,krb5_authdata as_rep){
 			if (send(sockfd, &as_rep.ad_type,sizeof(as_rep.ad_type) , 0) == -1){
 						           perror("send");}
 			as_rep.length=0;
-			as_rep.contents=(krb5_octet *)"HEEEELLLLOOOOOW";
 					if(as_rep.contents)
 					as_rep.length=strlen((char *) as_rep.contents)+1;
 	int len=as_rep.length;
@@ -226,19 +218,15 @@ void send_krb5_ticket(int sockfd,krb5_ticket as_rep){
 }
 
 void send_krb5_kdc_req(int sockfd,krb5_kdc_req as_rep,char *FLAGS){
-
-		as_rep.magic=1321;
 		as_rep.magic=htonl(as_rep.magic);
 		if (send(sockfd, &as_rep.magic,sizeof(as_rep.magic) , 0) == -1){
 		                   perror("send");}
 
-		as_rep.msg_type=12345;
 		as_rep.msg_type=htonl(as_rep.msg_type);
 		if (send(sockfd, &as_rep.msg_type,sizeof(as_rep.msg_type) , 0) == -1){
 				                   perror("send");}
 
 		send_padata(sockfd,*as_rep.padata);
-		as_rep.kdc_options=7654;
 		as_rep.kdc_options=htonl(as_rep.kdc_options);
 
 		if (send(sockfd, &as_rep.kdc_options,sizeof(as_rep.kdc_options) , 0) == -1){
@@ -254,7 +242,6 @@ void send_krb5_kdc_req(int sockfd,krb5_kdc_req as_rep,char *FLAGS){
 		as_rep.till=htonl(as_rep.till);
 				if (send(sockfd, &as_rep.till,sizeof(as_rep.till) , 0) == -1){
 								           perror("send");}
-				as_rep.rtime=12345;
 		as_rep.rtime=htonl(as_rep.rtime);
 				if (send(sockfd, &as_rep.rtime,sizeof(as_rep.rtime) , 0) == -1){
 										   perror("send");}

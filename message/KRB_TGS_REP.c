@@ -9,5 +9,5 @@ void KRB_TGS_REP_FORM(krb5_kdc_req *req, krb5_error *err, krb5_ticket *tkt)
         tgt := auth_hdr.ticket;
 
 	*/
-	tkt->enc_part.
+	//tkt->enc_part.
 }

@@ -44,8 +44,10 @@ void recv_krb5_authdata(int sockfd,krb5_authdata *as_rep){
 				if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
 								perror("recv");}
 				as_rep->length=ntohl(as_rep->length);
+				if(as_rep->length){
+					as_rep->contents=(krb5_octet *)malloc(as_rep->length);
 				if (recv(sockfd, (char *) as_rep->contents,as_rep->length , 0) == -1){
-								perror("recv");}
+								perror("recv");}}
 
 }
 void recv_krb5_enc_tkt_part(int sockfd,krb5_enc_tkt_part *as_rep){
@@ -77,9 +79,10 @@ void recv_padata(int new_fd,krb5_pa_data *as_rep){
 	if (recv(new_fd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
 			                   perror("recv");}
 	as_rep->length=ntohl(as_rep->length);
-
+	if(as_rep->length){
+		as_rep->contents=(krb5_octet *)malloc(as_rep->length);
 	if (recv(new_fd, (char *) as_rep->contents,as_rep->length , 0) == -1){
-		                   perror("recv");}
+		                   perror("recv");}}
 	if (recv(new_fd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
 			                   perror("recv");}
 	as_rep->magic=ntohl(as_rep->magic);
@@ -101,9 +104,10 @@ void recv_krb5_keyblock(int sockfd,krb5_keyblock *as_rep){
 	if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
 									perror("recv");}
 	as_rep->length=ntohl(as_rep->length);
-
+	if(as_rep->length){
+		as_rep->contents=(krb5_octet *)malloc(as_rep->length);
 	if (recv(sockfd, (char *) as_rep->contents,as_rep->length , 0) == -1){
-										perror("recv");}
+										perror("recv");}}
 
 }
 void recv_krb5_last_req_entry(int new_fd,krb5_last_req_entry *req){
@@ -154,9 +158,10 @@ void recv_krb5_address(int sockfd,krb5_address *as_rep){
 		if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
 					                   perror("recv");}
 		as_rep->length=ntohl(as_rep->length);
-
+		if(as_rep->length){
+			as_rep->contents=(krb5_octet *)malloc(as_rep->length);
 		if (recv(sockfd, (char *) as_rep->contents,as_rep->length , 0) == -1){
-				                   perror("recv");}
+				                   perror("recv");}}
 }
 void recv_krb5_enc_kdc_rep_part(int new_fd,krb5_enc_kdc_rep_part *req){
 

@@ -97,7 +97,7 @@ char* KRB_AP_ERR_INAPP_CKSUM_CHECK(char* ck_type_set, char* ck_type_curr)
 			return "KRB_AP_ERR_INAPP_CKSUM";
 		else return "";
 	}
-int decrypt_error()
+/* int decrypt_error()
 	{
 		return 0;
-	}
+	} */
