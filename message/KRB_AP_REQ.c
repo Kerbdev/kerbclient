@@ -1,6 +1,6 @@
 #include "message.h"
 #include "../error/error.h"
-void krb_ap_req (krb5_ap_req *packet,)
+void krb_ap_req (krb5_ap_req *packet)
 {
 	/*obtain ticket and session_key from cache;*/
 	//packet->ap_options = 10; // for example
