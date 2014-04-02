@@ -187,7 +187,7 @@ typedef struct _krb5_tkt_authent {
     krb5_magic magic;
     krb5_ticket *ticket;
     krb5_authenticator *authenticator;
-    ap_options ap_opt;
+    krb5_flags ap_options;
 } krb5_tkt_authent;
 
 /* credentials:	 Ticket, session key, etc. */
@@ -290,16 +290,10 @@ typedef struct _krb5_error {
 
 typedef struct _krb5_ap_req {
     krb5_magic magic;
-    ap_options ap_opt;		/* requested options */
+    krb5_flags ap_options;		/* requested options */
     krb5_ticket *ticket;		/* ticket */
     krb5_enc_data authenticator;	/* authenticator (already encrypted) */
 } krb5_ap_req;
-
-typedef struct _krb5_ap_rep {
-    krb5_magic magic;
-    krb5_enc_data enc_part;
-} krb5_ap_rep;
-
 typedef struct _krb5_ap_rep_enc_part {
     krb5_magic magic;
     krb5_timestamp ctime;		/* client time, seconds portion */
@@ -307,6 +301,12 @@ typedef struct _krb5_ap_rep_enc_part {
     krb5_keyblock *subkey;		/* true session key, optional */
     int seq_number;		/* sequence #, optional */
 } krb5_ap_rep_enc_part;
+typedef struct _krb5_ap_rep {
+    krb5_magic magic;
+    krb5_msgtype msg_type;
+    krb5_ap_rep_enc_part enc_part;
+} krb5_ap_rep;
+
 
 typedef struct _krb5_response {
     krb5_magic magic;

@@ -43,7 +43,7 @@ void krb_safe_check(krb5_safe *safe, krb5_kdc_rep *packet, krb5_error *err)
 	if (1/*safe_priv_common_checks_ok(packet)*/)
 		computed_cksum = packet_cksum;
 	if (computed_cksum != packet_cksum)
-		printf("%d", err -> error = KRB_AP_ERR_MODIFIED)
+		printf("%d", err -> error = KRB_AP_ERR_MODIFIED);
 /*
 	return (packet, PACKET_IS_GENUINE);
         else

@@ -15,7 +15,7 @@ int main(int argc, char *argv[]) {
 	int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
-	char FLAGS=0;
+	configuration config;
 	char s[INET6_ADDRSTRLEN];
 	if (argc != 2) {
 		fprintf(stderr, "usage: client hostname\n");
@@ -57,10 +57,67 @@ int main(int argc, char *argv[]) {
 	printf("client: connecting to %s\n", s);
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
-	krb5_kdc_req *as_rep=calloc(1,sizeof(krb5_kdc_req));
-	malloc_krb5_kdc_req(as_rep);
-	KRB_AS_REQ(as_rep,as_rep->padata);
-	send_krb5_kdc_req(sockfd,*as_rep,&FLAGS);
+	krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
+	malloc_krb5_kdc_req(as_req);
+	KRB_AS_REQ(as_req,as_req->padata);
+	send_krb5_kdc_req(sockfd,*as_req);
 
+	krb5_error *error=calloc(1,sizeof(krb5_error));
+	malloc_krb5_error(error);
+
+	krb5_kdc_rep *as_rep=calloc(1,sizeof(krb5_kdc_rep));
+	malloc_krb5_kdc_rep(as_rep);
+	recv_krb5_kdc_rep(sockfd,as_rep);
+	//fprintf(stderr,"%d",as_rep->enc_part2->msg_type);
+//fprintf(stderr,"%s",as_rep->enc_part2->aaddrs->contents);
+	KRB_AS_REP_CHECK(as_rep,error);//add logic if function return ERROR restart )
+
+	AS_TGS_REP_CHECK(as_req,error, as_rep, config);
+	krb5_kdc_rep *new_as_rep=calloc(1,sizeof(krb5_kdc_rep));
+	malloc_krb5_kdc_rep(new_as_rep);
+	krb5_kdc_req *new_as_req=calloc(1,sizeof(krb5_kdc_req));
+	malloc_krb5_kdc_req(new_as_req);
+
+	KRB_TGS_REQ_FORM (new_as_req, &config);
+	send_krb5_kdc_req(sockfd,*new_as_req);
+	recv_krb5_kdc_rep(sockfd,new_as_rep);
+
+	krb5_ticket *ticket=calloc(1,sizeof(krb5_ticket));
+	malloc_krb5_ticket(ticket);
+	recv_krb5_ticket(sockfd,ticket);
+	//NEED FUNCTION KRB_TGS_REP_CHECK
+
+
+	krb5_authenticator *authen=calloc(1,sizeof(krb5_authenticator));
+	malloc_krb5_authenticator(authen);
+	auth_form(&config,authen);
+	krb5_ap_req *ap_req=calloc(1,sizeof(krb5_ap_req));
+	malloc_krb5_ap_req(ap_req);
+	krb_ap_req (ap_req);
+
+	send_krb5_ap_req(sockfd,*ap_req);
+	send_krb5_authenticator(sockfd,*authen);
+	send_krb5_ticket(sockfd,*ticket);
+
+
+	krb5_ap_rep *ap_rep=calloc(1,sizeof(krb5_ap_rep));
+	malloc_krb5_ap_rep(ap_rep);
+	recv_krb5_ap_rep(sockfd,ap_rep);
+
+	krb5_authenticator *cleartext=calloc(1,sizeof(krb5_authenticator));
+	malloc_krb5_authenticator(cleartext);
+	krb_ap_rep_check(ap_rep, error, cleartext, authen);
+
+	//free memory
+	krb5_free_kdc_req(as_req);
+	krb5_free_kdc_rep(as_rep);
+	krb5_free_error(error);
+	krb5_free_kdc_rep(new_as_rep);
+	krb5_free_kdc_req(new_as_req);
+	krb5_free_ticket(ticket);
+	krb5_free_authenticator(authen);
+	krb5_free_ap_req(ap_req);
+	krb5_free_ap_rep(ap_rep);
+	krb5_free_authenticator(cleartext);
 	exit(0);
 }

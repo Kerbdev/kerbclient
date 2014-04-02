@@ -106,9 +106,9 @@ void KRB_AS_REP(configuration config,krb5_kdc_rep *rep, krb5_kdc_req *req, krb5_
 						tkt.enc_part2->times.starttime = req->from;
 					}
 				else
-					tkt.enc_part2->times.starttime = NULL;
+					tkt.enc_part2->times.starttime = 0;
 		if (req->till == 0)
-			till = NULL;
+			till = 0;
 		else
 			till = req->till;
 		tkt.enc_part2->times.endtime = min(till, tkt.enc_part2->times.starttime + config.max_life);
@@ -118,7 +118,7 @@ void KRB_AS_REP(configuration config,krb5_kdc_rep *rep, krb5_kdc_req *req, krb5_
 			req->rtime = req->till;
 		}
 		if (req->rtime == 0)
-			rtime = NULL;
+			rtime = 0;
 		else
 			rtime = req->rtime;
 		if (int_to_bit(ko, RENEWABLE))
@@ -127,7 +127,7 @@ void KRB_AS_REP(configuration config,krb5_kdc_rep *rep, krb5_kdc_req *req, krb5_
 			tkt.enc_part2->times.renew_till = min(rtime, tkt.enc_part2->times.starttime + config.max_renewable_life);
 		}
 		else
-			tkt.enc_part2->times.renew_till = NULL;
+			tkt.enc_part2->times.renew_till = 0;
 		if(req->addresses)
 			tkt.enc_part2->caddrs = req->addresses;
 		else

@@ -13,7 +13,7 @@ void KRB_TGS_REQ_FORM (krb5_kdc_req *req, configuration *config)
 	}
 	else
 	{
-		req->from = NULL;
+		req->from = 0;
 	}
 	req->till = req->from + config->max_life;
 	if (int_to_bit(req->kdc_options, RENEWABLE))

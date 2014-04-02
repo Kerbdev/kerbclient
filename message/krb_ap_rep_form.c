@@ -2,7 +2,6 @@
 #include "../error/error.h"
 void krb_ap_rep_form(krb5_ap_rep *packet, krb5_ap_rep_enc_part *body)
 {
-	packet->enc_part.kvno = pvno;
 	body->ctime = time(NULL);
 	//body->cusec;
 	if (/*selecting sub-session key*/1)

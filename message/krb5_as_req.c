@@ -34,28 +34,28 @@ void KRB_AS_REQ(krb5_kdc_req *kkk, krb5_pa_data *ppp)
 		time_t starttime = time(NULL);
 		time_t clienttime = time(NULL);
 		time_t endtime = starttime + conf.max_life * 3600;
-		kkk->padata->contents="Hello";
+		//kkk->padata->contents="Hello";
 		kkk->msg_type=10;
 		kkk->msg_type = 10; // Msg type
 		if (is_pa_enc_timestamp_required)
 			ppp->pa_type = 0; // Pre-auth type check
-				/* generating client key */
+/*				 generating client key
 		entropy_init( &entropy );
 		if((ret = ctr_drbg_init(&ctr_drbg, entropy_func, &entropy,
 			(unsigned char *)clientpass, strlen(clientpass))) != 0 )
 			printf(" failed\n ! ctr_drbg_init returned -0x%04x\n", -ret);
 		if((ret = ctr_drbg_random(&ctr_drbg, key, 32)) != 0)
 			printf(" failed\n ! ctr_drbg_random returned -0x%04x\n", -ret);
-		/* end */
+		end
 
-		/* generating iv */
+		 generating iv
 		entropy_init( &entropy );
 		if((ret = ctr_drbg_init(&ctr_drbg, entropy_func, &entropy,
 			(unsigned char*)clientpass, strlen(clientpass))) != 0)
 			printf(" failed\n ! ctr_drbg_init returned -0x%04x\n", -ret);
 		if((ret = ctr_drbg_random(&ctr_drbg, iv, 16)) != 0)
 			printf(" failed\n ! ctr_drbg_random returned -0x%04x\n", -ret);
-		/* end */
+		 end */
 
 		/* encrypting */
 		ptr = localtime(&clienttime);

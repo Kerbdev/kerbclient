@@ -29,8 +29,10 @@ void recv_krb5_data(int sockfd,krb5_data *as_rep){
 	if (recv(sockfd, &as_rep->length,sizeof(as_rep->length) , 0) == -1){
 						                   perror("recv");}
 	as_rep->length=ntohl(as_rep->length);
-	if (recv(sockfd, as_rep->data,as_rep->length , 0) == -1){
-						                   perror("recv");}
+	if(as_rep->length){
+			as_rep->data=(krb5_octet *)malloc(as_rep->length);
+		if (recv(sockfd, (char *) as_rep->data,as_rep->length , 0) == -1){
+			                   perror("recv");}}
 
 }
 void send_padata(int sockfd,krb5_pa_data as_rep){
@@ -194,7 +196,6 @@ void send_krb5_enc_tkt_part(int sockfd,krb5_enc_tkt_part as_rep){
 	as_rep.magic=htonl(as_rep.magic);
 					if (send(sockfd, &as_rep.magic,sizeof(as_rep.magic) , 0) == -1){
 					                   perror("send");}
-					as_rep.flags=898;
 	as_rep.flags=htonl(as_rep.flags);
 					if (send(sockfd, &as_rep.flags,sizeof(as_rep.flags) , 0) == -1){
 									   perror("send");}
@@ -217,11 +218,10 @@ void send_krb5_ticket(int sockfd,krb5_ticket as_rep){
 
 }
 
-void send_krb5_kdc_req(int sockfd,krb5_kdc_req as_rep,char *FLAGS){
+void send_krb5_kdc_req(int sockfd,krb5_kdc_req as_rep){
 		as_rep.magic=htonl(as_rep.magic);
 		if (send(sockfd, &as_rep.magic,sizeof(as_rep.magic) , 0) == -1){
 		                   perror("send");}
-
 		as_rep.msg_type=htonl(as_rep.msg_type);
 		if (send(sockfd, &as_rep.msg_type,sizeof(as_rep.msg_type) , 0) == -1){
 				                   perror("send");}
@@ -255,7 +255,10 @@ void send_krb5_kdc_req(int sockfd,krb5_kdc_req as_rep,char *FLAGS){
 				as_rep.ktype=htonl(as_rep.ktype);
 				if (send(sockfd, &as_rep.ktype,sizeof(as_rep.ktype) , 0) == -1){
 										perror("send");}
+
 		send_krb5_address(sockfd,*as_rep.addresses);
+		send_krb5_enc_data(sockfd ,as_rep.authorization_data );
+
 		send_krb5_authdata(sockfd,*as_rep.unenc_authdata);
 		send_krb5_ticket(sockfd,*as_rep.second_ticket);
 
