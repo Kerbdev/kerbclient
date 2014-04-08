@@ -2,7 +2,6 @@
 #include "../error/error.h"
 void krb_error (krb5_error *packet, krb5_kdc_rep *packet2)
 {
-	packet2 -> enc_part.kvno = 5;
 	packet2 -> msg_type = KRB5_ERROR;
 	packet -> stime = time(NULL);
 	packet -> server -> realm.data = "realm";
