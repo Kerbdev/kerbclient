@@ -70,23 +70,24 @@ int main(int argc, char *argv[]) {
 	recv_krb5_kdc_rep(sockfd,as_rep);
 	//fprintf(stderr,"%d",as_rep->enc_part2->msg_type);
 //fprintf(stderr,"%s",as_rep->enc_part2->aaddrs->contents);
-	KRB_AS_REP_CHECK(as_rep,error);//add logic if function return ERROR restart )
+	//KRB_AS_REP_CHECK(as_rep,error);//add logic if function return ERROR restart )
 
-	AS_TGS_REP_CHECK(as_req,error, as_rep, config);
+	//AS_TGS_REP_CHECK(as_req,error, as_rep, config);
 	krb5_kdc_rep *new_as_rep=calloc(1,sizeof(krb5_kdc_rep));
 	malloc_krb5_kdc_rep(new_as_rep);
 	krb5_kdc_req *new_as_req=calloc(1,sizeof(krb5_kdc_req));
 	malloc_krb5_kdc_req(new_as_req);
-
-	KRB_TGS_REQ_FORM (new_as_req, &config);
+	//krb5_crypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
+	//krb5_decrypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
+	//KRB_TGS_REQ_FORM (new_as_req, &config);
 	send_krb5_kdc_req(sockfd,*new_as_req);
 	recv_krb5_kdc_rep(sockfd,new_as_rep);
-
+	//krb5_crypt_enc_data(&as_rep->enc_part,"Ivan");
+	//krb5_decrypt_enc_data(&as_rep->enc_part,"Ivan");
 	krb5_ticket *ticket=calloc(1,sizeof(krb5_ticket));
 	malloc_krb5_ticket(ticket);
 	recv_krb5_ticket(sockfd,ticket);
 	//NEED FUNCTION KRB_TGS_REP_CHECK
-
 
 	krb5_authenticator *authen=calloc(1,sizeof(krb5_authenticator));
 	malloc_krb5_authenticator(authen);
@@ -94,7 +95,8 @@ int main(int argc, char *argv[]) {
 	krb5_ap_req *ap_req=calloc(1,sizeof(krb5_ap_req));
 	malloc_krb5_ap_req(ap_req);
 	krb_ap_req (ap_req);
-
+	//krb5_crypt_tkt_part(ticket->enc_part2,"Ivan");
+	//krb5_decrypt_tkt_part(ticket->enc_part2,"Ivan");
 	send_krb5_ap_req(sockfd,*ap_req);
 	send_krb5_authenticator(sockfd,*authen);
 	send_krb5_ticket(sockfd,*ticket);

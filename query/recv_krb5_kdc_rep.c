@@ -7,9 +7,9 @@
 #include "request.h"
 void recv_krb5_enc_data(int sockfd,krb5_enc_data *as_rep){
 
-			if (recv(sockfd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
-			                   perror("recv");}
-			as_rep->magic=ntohl(as_rep->magic);
+			//if (recv(sockfd, &as_rep->magic,sizeof(as_rep->magic) , 0) == -1){
+			 //                  perror("recv");}
+			//as_rep->magic=ntohl(as_rep->magic);
 
 			if (recv(sockfd, &as_rep->enctype,sizeof(as_rep->enctype) , 0) == -1){
 					                   perror("recv");}
