@@ -26,7 +26,7 @@ void recv_krb5_ap_rep_enc_part(int sockfd,krb5_ap_rep_enc_part *req){
 }
 
 
-void recv_krb5_ap_rep(int sockfd,krb5_ap_rep *req){
+void recv_krb5_ap_rep(int sockfd,krb5_ap_rep *req,krb5_error *error){
 	if (recv(sockfd, &req->magic,sizeof(req->magic) , 0) == -1){
 			                   perror("recv");}
 
@@ -35,7 +35,10 @@ void recv_krb5_ap_rep(int sockfd,krb5_ap_rep *req){
 	if (recv(sockfd, &req->msg_type,sizeof(req->msg_type) , 0) == -1){
 			                   perror("recv");}
 	req->msg_type=ntohl(req->msg_type);
-	recv_krb5_ap_rep_enc_part(sockfd,&req->enc_part);
+	if(req->msg_type==KRB5_ERROR){
+		recv_krb5_error(sockfd,error);
+		error->magic=req->magic;}
+	else recv_krb5_ap_rep_enc_part(sockfd,&req->enc_part);
 
 }
 

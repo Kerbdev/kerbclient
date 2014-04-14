@@ -65,8 +65,8 @@ void KRB_AS_REQ(krb5_kdc_req *kkk, krb5_pa_data *ppp)
 		aes_crypt_cbc(&aes, AES_ENCRYPT, 12, iv, input, output);
 		/* end */
 
-		kkk->client->data->data = "HELLLLLLLLOOOOOOOOOOOOOOO";
-		kkk->server->data->data = "server";
+		//kkk->client->data->data = "HELLLLLLLLOOOOOOOOOOOOOOO";
+		//kkk->server->data->data = "server";
 		//kkk->client->realm = "realm";
 		if (int_to_bit(ko, POSTDATED))
 			kkk->from = starttime;

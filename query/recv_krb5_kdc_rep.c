@@ -189,7 +189,7 @@ void recv_krb5_enc_kdc_rep_part(int new_fd,krb5_enc_kdc_rep_part *req){
 	recv_krb5_address(new_fd,req->aaddrs);
 }
 
-void recv_krb5_kdc_rep(int new_fd,krb5_kdc_rep *req){
+void recv_krb5_kdc_rep(int new_fd,krb5_kdc_rep *req,krb5_error *error){
 
 	if (recv(new_fd, &req->magic,sizeof(req->magic) , 0) == -1){
 			                   perror("recv");}
@@ -198,12 +198,16 @@ void recv_krb5_kdc_rep(int new_fd,krb5_kdc_rep *req){
 
 	if (recv(new_fd, &req->msg_type,sizeof(req->msg_type) , 0) == -1){
 					           perror("recv");}
+	if(req->msg_type==KRB5_ERROR){
+			recv_krb5_error(new_fd,error);
+			error->magic=req->magic;}
+	else{
 	req->msg_type=ntohl(req->msg_type);
 	recv_padata(new_fd,req->padata);
 	recv_principal_data(new_fd,req->client);
 	recv_krb5_ticket(new_fd,req->ticket);
 	recv_krb5_enc_data(new_fd,&req->enc_part);
-	recv_krb5_enc_kdc_rep_part(new_fd,req->enc_part2);
+	recv_krb5_enc_kdc_rep_part(new_fd,req->enc_part2);}
 
 }
 

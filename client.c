@@ -1,15 +1,9 @@
 #include "query/request.h"
 #include "message/message.h"
 #include "dynamic/dynamic.h"
-#define PORT "3490" // Порт, к которому подключается клиент
+#include "ap_connect/ap_connect.h"
+#define PORTS "3490" // Порт, к которому подключается клиент
 // получение структуры sockaddr, IPv4 или IPv6:
-void *get_in_addr(struct sockaddr *sa) {
-	if (sa->sa_family == AF_INET) {
-		return &(((struct sockaddr_in*) sa)->sin_addr);
-	}
-
-	return &(((struct sockaddr_in6*) sa)->sin6_addr);
-}
 
 int main(int argc, char *argv[]) {
 	int sockfd;
@@ -26,7 +20,7 @@ int main(int argc, char *argv[]) {
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 
-	if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
+	if ((rv = getaddrinfo(argv[1], PORTS, &hints, &servinfo)) != 0) {
 		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(rv));
 		return 1;
 	}
@@ -57,7 +51,7 @@ int main(int argc, char *argv[]) {
 	printf("client: connecting to %s\n", s);
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
-	krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
+	/*krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
 	malloc_krb5_kdc_req(as_req);
 	KRB_AS_REQ(as_req,as_req->padata);
 	send_krb5_kdc_req(sockfd,*as_req);
@@ -68,20 +62,24 @@ int main(int argc, char *argv[]) {
 	krb5_kdc_rep *as_rep=calloc(1,sizeof(krb5_kdc_rep));
 	malloc_krb5_kdc_rep(as_rep);
 	recv_krb5_kdc_rep(sockfd,as_rep);
+	//KRB_AS_REP(config,as_rep,as_req, as_req->padata,error);
 	//fprintf(stderr,"%d",as_rep->enc_part2->msg_type);
 //fprintf(stderr,"%s",as_rep->enc_part2->aaddrs->contents);
-	//KRB_AS_REP_CHECK(as_rep,error);//add logic if function return ERROR restart )
+	KRB_AS_REP_CHECK(as_rep,error,as_req);//add logic if function return ERROR restart )
 
-	//AS_TGS_REP_CHECK(as_req,error, as_rep, config);
+	AS_TGS_REP_CHECK(as_req,error, as_rep, config);
 	krb5_kdc_rep *new_as_rep=calloc(1,sizeof(krb5_kdc_rep));
 	malloc_krb5_kdc_rep(new_as_rep);
 	krb5_kdc_req *new_as_req=calloc(1,sizeof(krb5_kdc_req));
 	malloc_krb5_kdc_req(new_as_req);
-	//krb5_crypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
-	//krb5_decrypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
-	//KRB_TGS_REQ_FORM (new_as_req, &config);
+	KRB_TGS_REQ_FORM (new_as_req,new_as_req, &config);
 	send_krb5_kdc_req(sockfd,*new_as_req);
 	recv_krb5_kdc_rep(sockfd,new_as_rep);
+	//krb5_crypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
+	//krb5_decrypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
+
+	//krb5_decrypt_kdc_rep_part(new_as_rep->enc_part2,"Ivan");
+	//fprintf(stderr,"%s",new_as_rep->enc_part2->session->contents);
 	//krb5_crypt_enc_data(&as_rep->enc_part,"Ivan");
 	//krb5_decrypt_enc_data(&as_rep->enc_part,"Ivan");
 	krb5_ticket *ticket=calloc(1,sizeof(krb5_ticket));
@@ -91,11 +89,13 @@ int main(int argc, char *argv[]) {
 
 	krb5_authenticator *authen=calloc(1,sizeof(krb5_authenticator));
 	malloc_krb5_authenticator(authen);
-	auth_form(&config,authen);
+	//auth_form(&config,authen);
 	krb5_ap_req *ap_req=calloc(1,sizeof(krb5_ap_req));
 	malloc_krb5_ap_req(ap_req);
 	krb_ap_req (ap_req);
-	//krb5_crypt_tkt_part(ticket->enc_part2,"Ivan");
+	krb5_crypt_tkt_part(ticket->enc_part2,"Ivan");
+	//krb5_decrypt_tkt_part(ticket->enc_part2,"Ivan");
+	        	//fprintf(stderr,"%s",ticket->enc_part2->caddrs->contents);
 	//krb5_decrypt_tkt_part(ticket->enc_part2,"Ivan");
 	send_krb5_ap_req(sockfd,*ap_req);
 	send_krb5_authenticator(sockfd,*authen);
@@ -120,6 +120,8 @@ int main(int argc, char *argv[]) {
 	krb5_free_authenticator(authen);
 	krb5_free_ap_req(ap_req);
 	krb5_free_ap_rep(ap_rep);
-	krb5_free_authenticator(cleartext);
+	krb5_free_authenticator(cleartext);*/
+	close(sockfd);
+	ap_connect();
 	exit(0);
 }
