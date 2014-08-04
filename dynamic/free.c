@@ -26,13 +26,22 @@ krb5_free_ap_rep(krb5_ap_rep *val)
 }
 
 void
+krb5_free_authenticator_contents(krb5_authenticator *val)
+{
+    if (val == NULL)
+        return;
+    krb5_free_checksum(val->checksum);
+    krb5_free_principal(val->client);
+    krb5_free_keyblock(val->subkey);
+    krb5_free_authdata(val->authorization_data);
+}
+void
 krb5_free_ap_req(krb5_ap_req *val)
 {
     if (val == NULL)
         return;
     krb5_free_ticket(val->ticket);
-    if(val->authenticator.ciphertext.data!=NULL)
-    free(val->authenticator.ciphertext.data);
+    krb5_free_authenticator_contents(val->authenticator);
     free(val);
 }
 
@@ -43,17 +52,6 @@ krb5_free_ap_rep_enc_part(krb5_ap_rep_enc_part *val)
         return;
     krb5_free_keyblock(val->subkey);
     free(val);
-}
-
-void
-krb5_free_authenticator_contents(krb5_authenticator *val)
-{
-    if (val == NULL)
-        return;
-    krb5_free_checksum(val->checksum);
-    krb5_free_principal(val->client);
-    krb5_free_keyblock(val->subkey);
-    krb5_free_authdata(val->authorization_data);
 }
 void krb5_free_authdata(krb5_authdata *val ){
     if (val == NULL)

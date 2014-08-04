@@ -40,6 +40,6 @@ void dec_gost(char *set_hash,char *in,char **out,int n_blocks){
 		  gost_key(c,(byte *)set_hash);
 		  	  //*out=NULL;
 		  	  //*out=(char *)malloc(n_blocks*8);
-		  	  gost_dec(c,(byte *)in,(byte *) *out,n_blocks);
+		  gost_dec(c,(byte *)in,(byte *) *out,n_blocks);
 }
 

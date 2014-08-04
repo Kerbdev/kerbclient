@@ -1,5 +1,5 @@
 #include "query/request.h"
-#include "message/message.h"
+#include "mess/mess.h"
 #include "dynamic/dynamic.h"
 #include "ap_connect/ap_connect.h"
 #define PORTS "3490" // Порт, к которому подключается клиент
@@ -9,7 +9,9 @@ int main(int argc, char *argv[]) {
 	int sockfd;
 	struct addrinfo hints, *servinfo, *p;
 	int rv;
+	struct ifreq ifr;
 	configuration config;
+	get_config_param(&config);
 	char s[INET6_ADDRSTRLEN];
 	if (argc != 2) {
 		fprintf(stderr, "usage: client hostname\n");
@@ -40,6 +42,8 @@ int main(int argc, char *argv[]) {
 
 		break;
 	}
+	ifr.ifr_addr.sa_family = AF_INET;
+
 
 	if (p == NULL) {
 		fprintf(stderr, "client: failed to connect\n");
@@ -51,17 +55,51 @@ int main(int argc, char *argv[]) {
 	printf("client: connecting to %s\n", s);
 
 	freeaddrinfo(servinfo); // эта структура больше не нужна
-	/*krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
+	int kdc_options=4;
+	krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
 	malloc_krb5_kdc_req(as_req);
-	KRB_AS_REQ(as_req,as_req->padata);
+	char pass[]="12345";
+	//int c=strlen(pass)
+	krb5_as_req(as_req,kdc_options,&config,"ivan",pass);
+
+	krb5_kdc_rep *as_rep=calloc(1,sizeof(krb5_kdc_rep));
+		malloc_krb5_kdc_rep(as_rep);
+
+
+
+
 	send_krb5_kdc_req(sockfd,*as_req);
+
+
+/*	krb5_kdc_req *as_req=calloc(1,sizeof(krb5_kdc_req));
+	malloc_krb5_kdc_req(as_req);
+	//KRB_AS_REQ(as_req,as_req->padata);
+	send_krb5_kdc_req(sockfd,*as_req); */
+
+
+
 
 	krb5_error *error=calloc(1,sizeof(krb5_error));
 	malloc_krb5_error(error);
 
-	krb5_kdc_rep *as_rep=calloc(1,sizeof(krb5_kdc_rep));
-	malloc_krb5_kdc_rep(as_rep);
-	recv_krb5_kdc_rep(sockfd,as_rep);
+
+	recv_krb5_kdc_rep(sockfd,as_rep,error);
+
+
+	check_krb5_as_rep(as_req,as_rep,pass);
+
+	krb5_kdc_req *tgs_req=calloc(1,sizeof(krb5_kdc_req));
+	malloc_krb5_kdc_req(tgs_req);
+
+	krb5_tgs_req(tgs_req,as_rep,kdc_options,&config);
+	send_krb5_kdc_req(sockfd,*tgs_req);
+	krb5_kdc_rep *new_as_rep=calloc(1,sizeof(krb5_kdc_rep));
+	malloc_krb5_kdc_rep(new_as_rep);
+	recv_krb5_kdc_rep(sockfd,new_as_rep,error);
+	check_krb5_tgs_rep(new_as_rep,as_rep->enc_part2->session);
+
+
+	/*
 	//KRB_AS_REP(config,as_rep,as_req, as_req->padata,error);
 	//fprintf(stderr,"%d",as_rep->enc_part2->msg_type);
 //fprintf(stderr,"%s",as_rep->enc_part2->aaddrs->contents);
@@ -122,6 +160,6 @@ int main(int argc, char *argv[]) {
 	krb5_free_ap_rep(ap_rep);
 	krb5_free_authenticator(cleartext);*/
 	close(sockfd);
-	ap_connect();
+	ap_connect(new_as_rep->ticket,new_as_rep->enc_part2->session);
 	exit(0);
 }

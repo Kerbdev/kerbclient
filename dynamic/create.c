@@ -337,6 +337,8 @@ void malloc_krb5_priv(krb5_priv *val){
 void malloc_krb5_ap_req(krb5_ap_req *val){
 	val->ticket=calloc(1,sizeof(krb5_ticket));
 	malloc_krb5_ticket(val->ticket);
+	val->authenticator=calloc(1,sizeof(krb5_authenticator));
+	malloc_krb5_authenticator(val->authenticator);
 
 }
 void malloc_krb5_ap_rep(krb5_ap_rep *val){

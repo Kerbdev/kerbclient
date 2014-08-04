@@ -8,16 +8,7 @@
 #ifndef AP_CONNECT_H_
 #define AP_CONNECT_H_
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-#include <netdb.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
+#include "../query/request.h"
 void *get_in_addr(struct sockaddr *sa);
-void ap_connect();
+void ap_connect(krb5_ticket *ticket,krb5_keyblock *session);
 #endif /* AP_CONNECT_H_ */

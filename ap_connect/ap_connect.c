@@ -5,6 +5,8 @@
  *      Author: ivan
  */
 #include "ap_connect.h"
+#include "../dynamic/dynamic.h"
+#include "../mess/mess.h"
 #define PORT "3491"
 void *get_in_addr(struct sockaddr *sa) {
 	if (sa->sa_family == AF_INET) {
@@ -13,8 +15,9 @@ void *get_in_addr(struct sockaddr *sa) {
 
 	return &(((struct sockaddr_in6*) sa)->sin6_addr);
 }
-void ap_connect() {
-	char *l="Привет";
+void ap_connect(krb5_ticket *ticket,krb5_keyblock *session) {
+	configuration config;
+	get_config_param(&config);
 	struct addrinfo hints, *servinfo, *p;
 	char s[INET6_ADDRSTRLEN];
 	int sockfd,rv;
@@ -48,9 +51,23 @@ void ap_connect() {
 
 		inet_ntop(p->ai_family, get_in_addr((struct sockaddr *) p->ai_addr), s,
 				sizeof s);
-		printf("client: connecting to %s\n", s);
+		        	krb5_ap_rep *ap_rep=calloc(1,sizeof(krb5_ap_rep));
+		        		malloc_krb5_ap_rep(ap_rep);
+		krb5_authenticator *authen=calloc(1,sizeof(krb5_authenticator));
+				malloc_krb5_authenticator(authen);
 
-		send(sockfd,l,strlen(l),0);
+				krb5_error *error=calloc(1,sizeof(krb5_error));
+				        	malloc_krb5_error(error);
+
+				krb5_auth(authen,&config);
+				krb5_ap_req *ap_req=calloc(1,sizeof(krb5_ap_req));
+				malloc_krb5_ap_req(ap_req);
+				krb5_ap_req_imp(ap_req,authen,ticket,session,"key");
+
+				send_krb5_ap_req(sockfd,*ap_req);
+				recv_krb5_ap_rep(sockfd,ap_rep,error);
+
+				check_krb5_ap_rep(ap_rep,session);
 
 
 		close(sockfd);

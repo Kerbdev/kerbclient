@@ -292,7 +292,7 @@ typedef struct _krb5_ap_req {
     krb5_msgtype msg_type;
     krb5_flags ap_options;		/* requested options */
     krb5_ticket *ticket;		/* ticket */
-    krb5_enc_data authenticator;	/* authenticator (already encrypted) */
+    krb5_authenticator *authenticator;	/* authenticator (already encrypted) */
 } krb5_ap_req;
 typedef struct _krb5_ap_rep_enc_part {
     krb5_magic magic;
@@ -401,11 +401,11 @@ struct _krb5_kt;
 typedef struct _krb5_kt *krb5_keytab;
 void init_as_req(krb5_kdc_req *,char *);
 void krb5_crypt_enc_data(krb5_enc_data *data,char *pass);
-void krb5_decrypt_enc_data(krb5_enc_data *data,char *pass);
+int krb5_decrypt_enc_data(krb5_enc_data *data,char *pass);
 void krb5_crypt_keyblocks(krb5_keyblock *data,char *pass);
-void krb5_decrypt_keyblocks(krb5_keyblock *data,char *pass);
+int krb5_decrypt_keyblocks(krb5_keyblock *data,char *pass);
 void krb5_crypt_address(krb5_address *data,char *pass);
-void krb5_decrypt_address(krb5_address *data,char *pass);
+int krb5_decrypt_address(krb5_address *data,char *pass);
 void krb5_crypt_principal_data(krb5_principal_data *data,char *pass);
 void krb5_decrypt_principal_data(krb5_principal_data *data,char *pass);
 void krb5_crypt_transited(krb5_transited *data,char *pass);
@@ -414,7 +414,14 @@ void krb5_crypt_tkt_part(krb5_enc_tkt_part *data,char *pass);
 void krb5_decrypt_tkt_part(krb5_enc_tkt_part *data,char *pass);
 void krb5_decrypt_kdc_rep_part(krb5_enc_kdc_rep_part *data,char *pass);
 void krb5_crypt_kdc_rep_part(krb5_enc_kdc_rep_part *data,char *pass);
-void generate_session_key(unsigned char *session_key,int size);
+void krb5_crypt_pa_data(krb5_pa_data *data,char *pass);
+void krb5_decrypt_pa_data(krb5_pa_data *data,char *pass);
+void generate_session_key(char *session_key,int size);
+void krb5_decrypt_authenticator(krb5_authenticator *data,char *pass);
+void krb5_crypt_authenticator(krb5_authenticator *data,char *pass);
+void krb5_decrypt_ap_rep_enc_part(krb5_ap_rep_enc_part *data,char *pass);
+void krb5_crypt_ap_rep_enc_part(krb5_ap_rep_enc_part *data,char *pass);
+void krb5_decrypt_ap_rep_enc_part(krb5_ap_rep_enc_part *data,char *pass);
 #endif
 
 

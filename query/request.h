@@ -7,6 +7,8 @@
 
 #ifndef REQUEST_H_
 #define REQUEST_H_
+#include <sys/ioctl.h>
+#include <net/if.h>
 #include "../krb/krb.h"
 #include <stdio.h>
 #include <stdlib.h>
